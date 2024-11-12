@@ -12,9 +12,8 @@ void main(List<String> arguments) async {
     final ArgParser argParser = commandArgParser.argParser;
     final ArgResults results = commandArgParser.getResults();
     bool verbose = false;
-
-    final String jsonDirectoryPath = results.option('input-directory')!;
-    final String outputPath = results.option('output-class')!;
+    final String jsonDirectoryPath = results['input-directory'];
+    final String outputPath = results['output-class'];
 
     // Process the parsed arguments.
     if (results.wasParsed('help')) {
@@ -28,7 +27,6 @@ void main(List<String> arguments) async {
     if (results.wasParsed('verbose')) {
       verbose = true;
     }
-
     if (verbose) {
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
@@ -40,13 +38,14 @@ void main(List<String> arguments) async {
     }
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
-    print('e.message');
     print(e.message);
     print('');
+  } catch (e) {
+    print('An unexpected error occurred: $e');
   }
 }
 
 void _printUsage(ArgParser argParser) {
-  print('Usage: dart mc_locale_keys_class_generator.dart <flags> [arguments]');
+  print('Usage: dart mc_locale_keys_class_generator <flags> [arguments]');
   print(argParser.usage);
 }
