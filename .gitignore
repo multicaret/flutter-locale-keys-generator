@@ -1,0 +1,13 @@
+# https://dart.dev/guides/libraries/private-files
+# Created by `dart pub`
+.dart_tool/
+/.vale-styles/
+/.vale.ini
+/pubspec.lock
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/libraries/Dart_Packages.xml
+/.idea/libraries/Dart_SDK.xml
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
