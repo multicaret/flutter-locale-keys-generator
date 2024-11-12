@@ -60,7 +60,7 @@ class Generator {
 
     final StringBuffer buffer = StringBuffer();
 
-    buffer.writeln('// DO NOT EDIT. This is code generated via "${PackageKeys().name}"');
+    buffer.writeln('// DO NOT EDIT. This is code generated via "${PackageKeys.name.titleCase}"');
     buffer.writeln();
     buffer.writeln('abstract final class $className {');
 

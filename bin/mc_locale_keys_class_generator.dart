@@ -21,7 +21,7 @@ void main(List<String> arguments) async {
       return;
     }
     if (results.wasParsed('version')) {
-      print('mc_locale_keys_class_generator version: ${PackageKeys().version}');
+      print('mc_locale_keys_class_generator version: ${PackageKeys.version}');
       return;
     }
     if (results.wasParsed('verbose')) {
