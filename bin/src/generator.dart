@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:recase/recase.dart';
 
+import 'helper.dart';
 import 'package_keys.dart';
 
 class Generator {
   final String _jsonDirectoryPath;
   final String _outputPath;
   final bool _verbose;
+  final List<String> _addedKeys = [];
 
   Generator._(this._jsonDirectoryPath, this._outputPath, this._verbose);
 
@@ -45,6 +47,10 @@ class Generator {
     return mergedMap;
   }
 
+  String _keyCleaner(String key) {
+    return Helper.attributeCleaner(key);
+  }
+
   /// Function to get class name from output file path
   String _getClassNameFromPath() {
     final String fileName = _outputPath.split('/').last.split('.').first;
@@ -65,8 +71,9 @@ class Generator {
     buffer.writeln('abstract final class $className {');
 
     jsonMap.forEach((String mainKey, value) {
-      buffer.writeln('  // ${mainKey.camelCase} = "${value.toString()}"');
-      buffer.writeln('  static const String ${mainKey.camelCase} = \'$mainKey\';');
+      buffer.writeln('  // ${mainKey.camelCase} = "${value.toString().replaceAll('\n', '')}"');
+      final String tempKey = _keyCleaner(mainKey.camelCase);
+      _writeAttribute(buffer, tempKey, _handleOriginalKey(mainKey));
       if (value is Map<String, dynamic>) {
         buffer.writeln('  // Attributes under key "${mainKey.camelCase}"');
         _generateNestedAttributes(mainKey, value, buffer, mainKey);
@@ -96,17 +103,32 @@ class Generator {
     jsonMap.forEach((String key, value) {
       final String updatedKey = '$prefix${key.pascalCase}';
       if (value is String) {
-        buffer.writeln('  // $updatedKey = "${value.toString()}"');
-        buffer.writeln('  static const String $updatedKey = \'$parentKey.$key\';');
+        buffer.writeln('  // $updatedKey = "${value.toString().replaceAll('\n', '')}"');
+        final String tempKey = _keyCleaner(updatedKey.camelCase);
+        _writeAttribute(buffer, tempKey, "'$value.$key'");
       } else if (value is Map<String, dynamic>) {
         _generateNestedAttributes('$parentKey.$key', value, buffer, updatedKey);
       }
     });
   }
 
+  void _writeAttribute(StringBuffer buffer, String name, String value) {
+    String tmpName = name;
+    if (_addedKeys.contains(name)) {
+      int count = _addedKeys.where((element) => element == tmpName).length;
+      tmpName = '$tmpName$count';
+    }
+    _addedKeys.add(name);
+    buffer.writeln("  static const String $tmpName = '$value';");
+  }
+
   void _printIfVerbose(String msg) {
     if (_verbose) {
       stdout.writeln(msg);
     }
+  }
+
+  _handleOriginalKey(String key) {
+    return key.replaceAll("'", "\\'");
   }
 }
