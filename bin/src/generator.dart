@@ -105,7 +105,7 @@ class Generator {
       if (value is String) {
         buffer.writeln('  // $updatedKey = "${value.toString().replaceAll('\n', '')}"');
         final String tempKey = _keyCleaner(updatedKey.camelCase);
-        _writeAttribute(buffer, tempKey, "'$value.$key'");
+        _writeAttribute(buffer, tempKey, "$value.$key");
       } else if (value is Map<String, dynamic>) {
         _generateNestedAttributes('$parentKey.$key', value, buffer, updatedKey);
       }
@@ -115,7 +115,7 @@ class Generator {
   void _writeAttribute(StringBuffer buffer, String name, String value) {
     String tmpName = name;
     if (_addedKeys.contains(name)) {
-      int count = _addedKeys.where((element) => element == tmpName).length;
+      int count = _addedKeys.where((String element) => element == tmpName).length;
       tmpName = '$tmpName$count';
     }
     _addedKeys.add(name);
