@@ -2,11 +2,12 @@ import 'package:args/args.dart';
 
 class CommandArgParser {
   final List<String> _arguments;
-  ArgParser _argParser;
+  final ArgParser _argParser;
 
   CommandArgParser(List<String> arguments)
       : _arguments = arguments,
         _argParser = _buildArgParser();
+
   ArgParser get argParser => _argParser;
 
   ArgResults getResults() {
