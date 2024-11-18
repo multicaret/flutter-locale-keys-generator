@@ -1,6 +1,6 @@
 name: mc_locale_keys_class_generator
 description: A sample command-line application with basic argument parsing.
-version: 0.0.5
+version: 0.0.6
 repository: https://github.com/multicaret/flutter-locale-keys-generator
 
 environment:
